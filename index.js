@@ -159,8 +159,9 @@ app.get("/", function (req, res) {
             <th>Delete</th>
           </tr>
         </thead>
+        <tbody>
        ${items.map(function(x){
-         return ` <tbody>
+         return ` 
          <tr class="p-4">
 
            <td class="mx-4"><p>${x.name}</p><i class="fas fa-pen edit-name p-2" data-id="${x._id}"></i></td>
@@ -169,8 +170,9 @@ app.get("/", function (req, res) {
   
            <td><i class="fas fa-trash-alt delete-me" data-id="${x._id}"></i></td>
          </tr>
-       </tbody>`
+      `
        }).join(" ")}
+       </tbody>
       </table>
   
 
@@ -206,7 +208,7 @@ db.collection('items').findOneAndUpdate({_id:ObjectId(req.body.id)},{$set:{name:
 
 
 app.post('/delete-item',function(req,res){
-  // db.collection('items').deleteOne({_id:ObjectId(req.body.id)},function(){
-  //       res.send("success")
-  //     })
+  db.collection('items').deleteOne({_id:ObjectId(req.body.id)},function(){
+        res.send("success")
+      })
   })

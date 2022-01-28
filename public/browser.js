@@ -6,7 +6,7 @@ document.addEventListener("click", function (e) {
       axios
         .post("/delete-item", { id: e.target.getAttribute("data-id") })
         .then(function () {
-          e.target.parentElement.parentElement.parentElement.remove();
+          e.target.parentElement.parentElement.remove();
         })
         .catch(function () {
           console.log("please try agin later");
