@@ -12,6 +12,32 @@
         box-sizing: border-box;
       }
 
+      ul {
+        display: grid;
+        list-style: none;
+        grid-template-columns: repeat(1, 1fr);
+        border: 1px solid black;
+        border-radius: 10px;
+      }
+      ul li {
+        padding: 10px;
+        border-bottom: 1px gray dotted;
+      }
+      ul p {
+        float: left;
+      }
+      ul i {
+        float: right;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1100px;
+        margin: auto;
+        grid-gap: 10px;
+      }
+
       /* Button used to open the contact form - fixed at the bottom of the page */
       .open-button {
         background-color: #555;
@@ -86,52 +112,84 @@
   </head>
   <body>
     <section class="bg-gray-100 h-screen">
-      <h1 class="text-center text-3xl py-4 w-6/12 text-blue-700 mx-auto ">
+      <h1 class="text-center text-3xl py-4 w-6/12 text-blue-700 mx-auto">
         Contact Keeper App
       </h1>
-      <table class="text-center py-4 w-max mx-auto my-4 text-black">
-        <thead class="text-center py-4 w-max bg-blue-200 mx-auto my-4 text-black">
-          <tr>
-            <th >Name</th>
-            <th>Phone no.</th>
-            <th>Email</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Meeta</td>
-            <td>89695794797</td>
-            <td>meet@4.</td>
-            <td><button>edit</button></td>
-            <td><button>delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-  
+      <div>
+        <div class="grid" id="item-list">
+          <ul>
+            <li>
+              <p>${x.name}</p>
+              <i class="fas fa-pen edit-name p-2" data-id="${x._id}"></i>
+            </li>
+            <li>
+              <p>${x.email}</p>
+              <i class="fas fa-pen edit-email p-2" data-id="${x._id}"></i>
+            </li>
+            <li>
+              <p>${x.phone}</p>
+              <i class="fas fa-pen edit-phone p-2" data-id="${x._id}"></i>
+            </li>
+            <li>
+              <i class="fas fa-trash-alt delete-me" data-id="${x._id}"></i>
+            </li>
+          </ul>
 
-    <button class="open-button" onclick="openForm()">Add Contact</button>
+          <ul>
+            <li>
+              <p>name</p>
+              <i>edit</i>
+            </li>
+            <li>
+              <p>email</p>
+              <i>edit</i>
+            </li>
+            <li>
+              <p>phone no</p>
+              <i>edit</i>
+            </li>
+            <li><i>Delete</i></li>
+          </ul>
 
-    <div class="form-popup" id="myForm">
-      <form action="/createItem" class="form-container">
-        <h1>Add Contact List</h1>
-        <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Enter name" name="name" required />
+          <ul>
+            <li>
+              <p>name</p>
+              <i>edit</i>
+            </li>
+            <li>
+              <p>email</p>
+              <i>edit</i>
+            </li>
+            <li>
+              <p>phone no</p>
+              <i>edit</i>
+            </li>
+            <li><i>Delete</i></li>
+          </ul>
+        </div>
+      </div>
 
-        <label for="phn"><b>Phone no.</b></label>
-        <input type="text" placeholder="Enter phoneno." name="phn" required />
+      <button class="open-button" onclick="openForm()">Add Contact</button>
 
-        <label for="email"><b>Email</b></label>
-        <input type="email" placeholder="Enter Email" name="email" required />
+      <div class="form-popup" id="myForm">
+        <form action="/createItem" class="form-container">
+          <h1>Add Contact List</h1>
+          <label for="name"><b>Name</b></label>
+          <input type="text" placeholder="Enter name" name="name" required />
 
-        <button type="submit" class="btn">Save</button>
-        <button type="button" class="btn cancel" onclick="closeForm()">
-          Close
-        </button>
-      </form>
-    </div>
-</section>
+          <label for="phn"><b>Phone no.</b></label>
+          <input type="text" placeholder="Enter phoneno." name="phn" required />
+
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="email" required />
+
+          <button type="submit" class="btn">Save</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">
+            Close
+          </button>
+        </form>
+      </div>
+    </section>
     <!-- <script src="index.js"></script> -->
   </body>
 </html>

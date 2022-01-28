@@ -5,8 +5,7 @@ let ObjectId = require("mongodb").ObjectId;
 
 let db;
 let app = express();
-app.use(express.static('public'))
-
+app.use(express.static("public"));
 
 let connectionString =
   "mongodb+srv://tarang:AzOgcKjwqupEmWb6@cluster0.9s75g.mongodb.net/contactPageApp?retryWrites=true&w=majority";
@@ -24,14 +23,14 @@ mongodb.connect(
   }
 );
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 app.get("/", function (req, res) {
-  db.collection('items').find().toArray(function(err,items){
-    // console.log(items)
+  db.collection("items")
+    .find()
+    .toArray(function (err, items) {
+      // console.log(items)
 
       res.send(`<!DOCTYPE html>
     <html>
@@ -47,17 +46,51 @@ app.get("/", function (req, res) {
           * {
             box-sizing: border-box;
           }
+
+          
+      ul{
+        display: grid;
+        list-style: none;
+        grid-template-columns: repeat(1,1fr);
+     
+        border-radius: 10px;
+    
+
+      }
+ul li{
+  padding: 10px;
+  // border-bottom: 5px blue solid;
+}
+      ul p{
+        float: left;
+        text-decoration: underline;
+        text-decoration-color: blue;
+        text-underline-position: under;
+     
+      }
+      ul i {
+        float: right;
+      }
+
+.grid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  max-width: 1100px;
+  margin: auto;
+  grid-gap: 20px;
+}
+
     i{
       cursor: pointer;
     }
           /* Button used to open the contact form - fixed at the bottom of the page */
           .open-button {
-            background-color: #555;
-            color: white;
+            background-color: rgb(224 242 254);
+            color: #222;
             padding: 16px 20px;
             border: none;
             cursor: pointer;
-            opacity: 0.8;
+         
             position: fixed;
             bottom: 23px;
             right: 28px;
@@ -100,7 +133,7 @@ app.get("/", function (req, res) {
     
           /* Set a style for the submit/login button */
           .form-container .btn {
-            background-color: #04aa6d;
+            // background-color: #04aa6d;
             color: white;
             padding: 16px 20px;
             border: none;
@@ -115,65 +148,63 @@ app.get("/", function (req, res) {
             background-color: rgb(243, 98, 98);
           }
     
-          /* Add some hover effects to buttons */
-          .form-container .btn:hover,
-          .open-button:hover {
-            opacity: 1;
-          }
         </style>
       </head>
       <body>
-        <section class="bg-gray-100 h-screen">
+        <section class="bg-sky-800 h-min">
      
         <button class="open-button" onclick="openForm()">Add Contact</button>
     
         <div class="form-popup" id="myForm">
-          <form action="/create-item" method="POST" class="form-container >
+          <form action="/create-item" method="POST" id="create-form" class="form-container >
             <h1>Add Contact List</h1>
             <label for="name"><b>Name</b></label>
-            <input  name="item"  type="text" placeholder="Enter name" required />
+            <input   id="input1" name="item"  type="text" placeholder="Enter name" required />
             <label for="phn"><b>Phone no.</b></label>
-            <input type="text" placeholder="Enter phoneno." name="phn" maxlength="12" required />
+            <input id="input2" type="text" placeholder="Enter phoneno." name="phn" maxlength="12" required />
     
             <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" required />
+            <input  id="input3" type="email" placeholder="Enter Email" name="email" required />
           
     
-            <button type="submit" class="btn">Save</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">
+            <button type="submit" class="btn bg-yellow-600">Save</button>
+            <button type="button" class="btn cancel bg-yellow-600" onclick="closeForm()">
               Close
             </button>
           </form>
         </div>
 
-        <h1 class="text-center text-3xl py-4 w-6/12 text-blue-700 mx-auto ">
-        Contact Keeper App
+        <h1 class="text-center text-3xl py-4 w-6/12 text-sky-50 mx-auto ">
+        <i class="fas fa-address-book"></i> Contact Keeper App
       </h1>
-      <table class="text-center py-4 w-max mx-auto my-4 text-black">
-        <thead class="text-center py-4  w-max bg-blue-200 mx-auto my-4 text-black">
-          <tr>
-            <th >Name</th>
-            <th>Phone no.</th>
-            <th>Email</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-       ${items.map(function(x){
-         return ` 
-         <tr class="p-4">
-
-           <td class="mx-4"><p>${x.name}</p><i class="fas fa-pen edit-name p-2" data-id="${x._id}"></i></td>
-           <td>${x.phone} <i class="fas fa-pen edit-phone p-2" data-id="${x._id}"></i></td>
-           <td>${x.email} <i class="fas fa-pen edit-email p-2" data-id="${x._id}"></i></td>
-  
-           <td><i class="fas fa-trash-alt delete-me" data-id="${x._id}"></i></td>
-         </tr>
-      `
-       }).join(" ")}
-       </tbody>
-      </table>
+    
+          <div class="grid" id="item-list">
+     
+       ${items
+         .map(function (x) {
+           return ` 
+           <ul class="bg-sky-50 p-4 shadow-lg">
+           <i class="fas fa-user bg-pink-400 w-min m-auto  rounded-full p-2 text-center text-white"></i>
+             <li class="p-3">
+               <p>${x.name}</p>
+               <i class="fas fa-pen edit-name p-2 bg-yellow-600 rounded-full text-white" data-id="${x._id}"></i>
+             </li>
+             <li class="p-3">
+               <p>${x.email}</p>
+               <i class="fas fa-pen edit-email p-2 bg-green-600 rounded-full text-white" data-id="${x._id}"></i>
+             </li>
+             <li class="p-3">
+               <p>${x.phone}</p>
+               <i class="fas fa-pen edit-phone p-2 bg-blue-600 rounded-full text-white" data-id="${x._id}"></i>
+             </li>
+             <li>
+               <i class="fas fa-trash-alt  delete-me w-min m-auto bg-red-500 rounded-full p-2 text-center text-white shadow-lg" data-id="${x._id}"></i>
+             </li>
+           </ul>
+      `;
+         })
+         .join(" ")}
+     </div>
   
 
     </section>
@@ -184,31 +215,30 @@ app.get("/", function (req, res) {
       </body>
     </html>
     `);
-  })
-
+    });
 });
 
 app.post("/create-item", function (req, res) {
   db.collection("items").insertOne(
-    { name: req.body.item, phone: req.body.phn, email: req.body.email },
+    { name: req.body.text1, phone: req.body.text2, email: req.body.text3 },
     function () {
-res.redirect('/')    }
+  //  res.json(info.ops[0])
+    }
   );
 });
 
+app.post("/update-item", function (req, res) {
+  db.collection("items").findOneAndUpdate(
+    { _id: ObjectId(req.body.id) },
+    { $set: { name: req.body.text } },
+    function () {
+      res.send("success");
+    }
+  );
+});
 
-
-app.post('/update-item',function(req,res){
-db.collection('items').findOneAndUpdate({_id:ObjectId(req.body.id)},{$set:{name:req.body.text}},function(){
- 
-  console.log(ObjectId(req.body.id))
-      res.send("success")
-    })
-})
-
-
-app.post('/delete-item',function(req,res){
-  db.collection('items').deleteOne({_id:ObjectId(req.body.id)},function(){
-        res.send("success")
-      })
-  })
+app.post("/delete-item", function (req, res) {
+  db.collection("items").deleteOne({ _id: ObjectId(req.body.id) }, function () {
+    res.send("success");
+  });
+});

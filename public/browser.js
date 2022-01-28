@@ -1,3 +1,43 @@
+function itemTemplate(x) {
+  return ` 
+  <tr class="p-4">
+
+    <td class="mx-4"><p>${x.name}</p><i class="fas fa-pen edit-name p-2" data-id="${x._id}"></i></td>
+    <td>${x.phone} <i class="fas fa-pen edit-phone p-2" data-id="${x._id}"></i></td>
+    <td>${x.email} <i class="fas fa-pen edit-email p-2" data-id="${x._id}"></i></td>
+
+    <td><i class="fas fa-trash-alt delete-me" data-id="${x._id}"></i></td>
+  </tr>
+`;
+}
+
+// create item
+let input1 = document.getElementById("input1");
+let input2 = document.getElementById("input2");
+let input3 = document.getElementById("input3");
+
+document.getElementById("create-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  axios
+    .post("/create-item", {
+      text1: input1.value,
+      text2: input2.value,
+      text3: input3.value,
+    })
+    .then(function (response) {
+      document
+        .getElementById("item-list")
+        .insertAdjacentHTML("beforeend", itemTemplate(response.data));
+        input1.value=""
+        input2.value=""
+        input3.value=""
+    })
+    .catch(function () {
+      console.log("please try agin later");
+    });
+});
+
 document.addEventListener("click", function (e) {
   //delete feature
 
