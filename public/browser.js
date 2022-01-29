@@ -1,13 +1,24 @@
 function itemTemplate(x) {
   return ` 
-  <tr class="p-4">
-
-    <td class="mx-4"><p>${x.name}</p><i class="fas fa-pen edit-name p-2" data-id="${x._id}"></i></td>
-    <td>${x.phone} <i class="fas fa-pen edit-phone p-2" data-id="${x._id}"></i></td>
-    <td>${x.email} <i class="fas fa-pen edit-email p-2" data-id="${x._id}"></i></td>
-
-    <td><i class="fas fa-trash-alt delete-me" data-id="${x._id}"></i></td>
-  </tr>
+  <ul class="bg-teal-700 p-2 shadow-lg">
+  <i class="fas fa-user w-min m-auto  rounded-full p-2 text-center text-white"></i>
+    <li class="p-1 ml-2 mr-2">
+      <p class="p-font  text-white">${x.name}</p>
+      <i class="fas fa-pen edit-name p-2  rounded-full text-white" data-id="${x._id}"></i>
+    </li>
+    <li class="p-1 ml-2 mr-2 text-white">
+    <p>${x.phone}</p>
+    <i class="fas fa-pen edit-phone p-2  rounded-full text-white" data-id="${x._id}"></i>
+  </li>
+    <li class="p-1 ml-2 mr-2  text-white">
+      <p>${x.email}</p>
+      <i class="fas fa-pen edit-email p-2  rounded-full text-white" data-id="${x._id}"></i>
+    </li>
+   
+    <li>
+      <i class="fas fa-trash-alt text-teal-900 w- delete-me m-auto bg-white   p-2 text-center  shadow-lg" data-id="${x._id}"> delete</i>
+    </li>
+  </ul>
 `;
 }
 
@@ -29,9 +40,9 @@ document.getElementById("create-form").addEventListener("submit", function (e) {
       document
         .getElementById("item-list")
         .insertAdjacentHTML("beforeend", itemTemplate(response.data));
-        input1.value=""
-        input2.value=""
-        input3.value=""
+      input1.value = "";
+      input2.value = "";
+      input3.value = "";
     })
     .catch(function () {
       console.log("please try agin later");
@@ -58,15 +69,17 @@ document.addEventListener("click", function (e) {
   if (e.target.classList.contains("edit-name")) {
     let userInput = prompt(
       "enter your new name",
-      e.target.previousSibling.innerHTML
+      e.target.previousElementSibling.innerHTML
     );
 
-    let q = e.target.getAttribute("data-id");
     if (userInput) {
       axios
-        .post("/update-item", { text: userInput, id: q })
+        .post("/update-name", {
+          text: userInput,
+          id: e.target.getAttribute("data-id"),
+        })
         .then(function () {
-          e.target.previousSibling.innerHTML = userInput;
+          e.target.previousElementSibling.innerHTML = userInput;
           console.log(q);
         })
         .catch(function () {
@@ -76,26 +89,44 @@ document.addEventListener("click", function (e) {
   }
 
   if (e.target.classList.contains("edit-phone")) {
-    let userInput = prompt("enter your new phone number");
+    let userInput = prompt(
+      "enter your new phone number",
+      e.target.previousElementSibling.innerHTML
+    );
 
-    let q = e.target.getAttribute("data-id");
-    axios
-      .post("/update-item", { phoneNo: userInput, id: q })
-      .then(function () {})
-      .catch(function () {
-        console.log("please try agin later");
-      });
+    if (userInput) {
+      axios
+        .post("/update-phone", {
+          phoneNo: userInput,
+          id: e.target.getAttribute("data-id"),
+        })
+        .then(function () {
+          e.target.previousElementSibling.innerHTML = userInput;
+        })
+        .catch(function () {
+          console.log("please try agin later");
+        });
+    }
   }
   if (e.target.classList.contains("edit-email")) {
-    let userInput = prompt("enter your new email");
+    let userInput = prompt(
+      "enter your new email",
+      e.target.previousElementSibling.innerHTML
+    );
 
-    let q = e.target.getAttribute("data-id");
-    axios
-      .post("/update-item", { mail: userInput, id: q })
-      .then(function () {})
-      .catch(function () {
-        console.log("please try agin later");
-      });
+    if (userInput) {
+      axios
+        .post("/update-email", {
+          mail: userInput,
+          id: e.target.getAttribute("data-id"),
+        })
+        .then(function () {
+          e.target.previousElementSibling.innerHTML = userInput;
+        })
+        .catch(function () {
+          console.log("please try agin later");
+        });
+    }
   }
 });
 
