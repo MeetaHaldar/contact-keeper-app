@@ -1,5 +1,5 @@
 let express = require("express");
-
+let sanitizeHTML= require('sanitize-html')
 let mongodb = require("mongodb").MongoClient;
 let ObjectId = require("mongodb").ObjectId;
 
@@ -25,6 +25,19 @@ mongodb.connect(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+function passwordProtection(req,res,next){
+  res.set("WWW-Authenticate", 'Basic realm="Contact keeper app"');
+  console.log(req.headers.authorization);
+  if (req.headers.authorization == "Basic bWVldGE6aGFsZGFy") {
+    //meeta haldar
+    next();
+  } else {
+    res.status(401).send("authentication required");
+  }
+}
+
+app.use(passwordProtection);
 
 app.get("/", function (req, res) {
   db.collection("items")
@@ -201,31 +214,31 @@ ul li{
     
           <div class="grid" id="item-list">
      
-       ${items
-         .map(function (x) {
-           return ` 
-           <ul class="bg-teal-700 p-2 shadow-lg">
-           <i class="fas fa-user w-min m-auto  rounded-full p-2 text-center text-white"></i>
-             <li class="p-1 ml-2 mr-2">
-               <p class="p-font  text-white">${x.name}</p>
-               <i class="fas fa-pen edit-name p-2  rounded-full text-white" data-id="${x._id}"></i>
-             </li>
-             <li class="p-1 ml-2 mr-2 text-white">
-             <p>${x.phone}</p>
-             <i class="fas fa-pen edit-phone p-2  rounded-full text-white" data-id="${x._id}"></i>
-           </li>
-             <li class="p-1 ml-2 mr-2  text-white">
-               <p>${x.email}</p>
-               <i class="fas fa-pen edit-email p-2  rounded-full text-white" data-id="${x._id}"></i>
-             </li>
-            
-             <li>
-               <i class="fas fa-trash-alt text-teal-900 w- delete-me m-auto bg-white   p-2 text-center  shadow-lg" data-id="${x._id}"> delete</i>
-             </li>
-           </ul>
-      `;
-         })
-         .join(" ")}
+          ${items
+            .map(function (x) {
+              return ` 
+              <ul class="bg-teal-700 p-2 shadow-lg">
+              <i class="fas fa-user w-min m-auto  rounded-full p-2 text-center text-white"></i>
+                <li class="p-1 ml-2 mr-2">
+                  <p class="p-font  text-white">${x.name}</p>
+                  <i class="fas fa-pen edit-name p-2  rounded-full text-white" data-id="${x._id}"></i>
+                </li>
+                <li class="p-1 ml-2 mr-2 text-white">
+                <p>${x.phone}</p>
+                <i class="fas fa-pen edit-phone p-2  rounded-full text-white" data-id="${x._id}"></i>
+              </li>
+                <li class="p-1 ml-2 mr-2  text-white">
+                  <p>${x.email}</p>
+                  <i class="fas fa-pen edit-email p-2  rounded-full text-white" data-id="${x._id}"></i>
+                </li>
+               
+                <li>
+                  <i class="fas fa-trash-alt text-teal-900 w- delete-me m-auto bg-white   p-2 text-center  shadow-lg" data-id="${x._id}"> delete</i>
+                </li>
+              </ul>
+         `;
+            })
+            .join(" ")}
      </div>
   
 
@@ -257,7 +270,7 @@ ul li{
     </div>
   </footer>
         <script src="/browser.js">
-                                       
+        let items =${JSON.stringify(items)}                     
         </script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
       </body>
@@ -267,10 +280,24 @@ ul li{
 });
 
 app.post("/create-item", function (req, res) {
+  let mysafeText1= sanitizeHTML(req.body.text1,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
+  let mysafeText2= sanitizeHTML(req.body.text2,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
+  let mysafeText3= sanitizeHTML(req.body.text3,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
+
   db.collection("items").insertOne(
+  
     { name: req.body.text1, phone: req.body.text2, email: req.body.text3 },
     function (err,info) {
-      data = { name: req.body.text1, phone: req.body.text2, email: req.body.text3, _id: info.insertedId };
+      data = { name:mysafeText1 , phone:mysafeText2, email: mysafeText3, _id: info.insertedId };
       res.json(data);
       // res.json(info.insertedId[0])
     }
@@ -278,9 +305,13 @@ app.post("/create-item", function (req, res) {
 });
 
 app.post("/update-name", function (req, res) {
+  let myUpdatedSafeName=sanitizeHTML(req.body.text,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
-    { $set: { name: req.body.text } },
+    { $set: { name: myUpdatedSafeName } },
     function () {
       res.send("success");
     }
@@ -288,18 +319,26 @@ app.post("/update-name", function (req, res) {
 });
 
 app.post("/update-phone", function (req, res) {
+  let myUpdatedSafePhone=sanitizeHTML(req.body.phoneNo,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
-    { $set: { phone: req.body.phoneNo} },
+    { $set: { phone:myUpdatedSafePhone } },
     function () {
       res.send("success");
     }
   );
 });
 app.post("/update-email", function (req, res) {
+  let myUpdatedSafeEmail=sanitizeHTML(req.body.mail,{
+    allowedTags: [],
+    allowedAttributes: {},
+  })
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
-    { $set: { email: req.body.mail} },
+    { $set: { email:myUpdatedSafeEmail } },
     function () {
       res.send("success");
     }

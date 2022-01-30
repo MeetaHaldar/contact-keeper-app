@@ -23,6 +23,20 @@ function itemTemplate(x) {
 `;
 }
 
+
+// initial page load render
+
+// let ourHTML=items.map(function(item){
+// return itemTemplate(item)
+// }).join('')
+
+// document
+// .getElementById("item-list").insertAdjacentHTML("beforeend", ourHTML)
+
+
+
+
+
 // create feature 
 
 let input1 = document.getElementById("input1");
