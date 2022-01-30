@@ -269,8 +269,10 @@ ul li{
 app.post("/create-item", function (req, res) {
   db.collection("items").insertOne(
     { name: req.body.text1, phone: req.body.text2, email: req.body.text3 },
-    function () {
-      //  res.json(info.ops[0])
+    function (err,info) {
+      data = { name: req.body.text1, phone: req.body.text2, email: req.body.text3, _id: info.insertedId };
+      res.json(data);
+      // res.json(info.insertedId[0])
     }
   );
 });

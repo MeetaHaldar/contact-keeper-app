@@ -1,4 +1,5 @@
 function itemTemplate(x) {
+  console.log(x.name)
   return ` 
   <ul class="bg-teal-700 p-2 shadow-lg">
   <i class="fas fa-user w-min m-auto  rounded-full p-2 text-center text-white"></i>
@@ -22,7 +23,8 @@ function itemTemplate(x) {
 `;
 }
 
-// create item
+// create feature 
+
 let input1 = document.getElementById("input1");
 let input2 = document.getElementById("input2");
 let input3 = document.getElementById("input3");
