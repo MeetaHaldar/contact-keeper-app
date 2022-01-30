@@ -22,7 +22,6 @@
   "homepage": "https://github.com/MeetaHaldar/contact-keeper-app#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "express-basic-auth": "^1.2.1",
     "mongodb": "^4.3.1",
     "nodemon": "^2.0.15",
     "sanitize-html": "^2.6.1"
