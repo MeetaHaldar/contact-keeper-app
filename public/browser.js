@@ -8,6 +8,7 @@ function itemTemplate(x) {
       <i class="fas fa-pen edit-name p-2  rounded-full text-white" data-id="${x._id}"></i>
     </li>
     <li class="p-1 ml-2 mr-2 text-white">
+    
     <p>${x.phone}</p>
     <i class="fas fa-pen edit-phone p-2  rounded-full text-white" data-id="${x._id}"></i>
   </li>
@@ -18,6 +19,8 @@ function itemTemplate(x) {
    
     <li>
       <i class="fas fa-trash-alt text-teal-900 w- delete-me m-auto bg-white   p-2 text-center  shadow-lg" data-id="${x._id}"> delete</i>
+      <a href="mailto:meetahaldar1001@gmail.com?subject=sending details of my contact &body=name =${x.name} , phone no.=${x.phone} , email=${x.email}"> <i class="fas fa-paper-plane text-teal-900  m-auto bg-white  p-2 text-center  shadow-lg" data-id="${x._id}"> send</i></a>
+
     </li>
   </ul>
 `;
