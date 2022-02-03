@@ -26,18 +26,18 @@ mongodb.connect(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-function passwordProtection(req,res,next){
-  res.set("WWW-Authenticate", 'Basic realm="Contact keeper app"');
-  console.log(req.headers.authorization);
-  if (req.headers.authorization == "Basic bWVldGE6aGFsZGFy") {
-    //meeta haldar
-    next();
-  } else {
-    res.status(401).send("authentication required");
-  }
-}
+// function passwordProtection(req,res,next){
+//   res.set("WWW-Authenticate", 'Basic realm="Contact keeper app"');
+//   console.log(req.headers.authorization);
+//   if (req.headers.authorization == "Basic bWVldGE6aGFsZGFy") {
+//     //meeta haldar
+//     next();
+//   } else {
+//     res.status(401).send("authentication required");
+//   }
+// }
 
-app.use(passwordProtection);
+// app.use(passwordProtection);
 
 app.get("/", function (req, res) {
   db.collection("items")
