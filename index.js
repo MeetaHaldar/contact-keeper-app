@@ -1,5 +1,5 @@
 let express = require("express");
-let sanitizeHTML= require('sanitize-html')
+let sanitizeHTML = require("sanitize-html");
 let mongodb = require("mongodb").MongoClient;
 let ObjectId = require("mongodb").ObjectId;
 
@@ -212,12 +212,12 @@ ul li{
         <i class="fas fa-address-book"></i> Contact Keeper App
       </h1>
     
-          <div class="grid" id="item-list">
+          <div class="grid  md:grid-cols-3  sm:grid-cols-2 grid-cols-1" id="item-list">
      
           ${items
             .map(function (x) {
               return ` 
-              <ul class="bg-teal-700 p-2 shadow-lg">
+              <ul class="bg-teal-700 p-2 shadow-lg m-3">
               <i class="fas fa-user w-min m-auto  rounded-full p-2 text-center text-white"></i>
                 <li class="p-1 ml-2 mr-2">
                   <p class="p-font  text-white">${x.name}</p>
@@ -282,35 +282,38 @@ ul li{
 });
 
 app.post("/create-item", function (req, res) {
-  let mysafeText1= sanitizeHTML(req.body.text1,{
+  let mysafeText1 = sanitizeHTML(req.body.text1, {
     allowedTags: [],
     allowedAttributes: {},
-  })
-  let mysafeText2= sanitizeHTML(req.body.text2,{
+  });
+  let mysafeText2 = sanitizeHTML(req.body.text2, {
     allowedTags: [],
     allowedAttributes: {},
-  })
-  let mysafeText3= sanitizeHTML(req.body.text3,{
+  });
+  let mysafeText3 = sanitizeHTML(req.body.text3, {
     allowedTags: [],
     allowedAttributes: {},
-  })
+  });
 
   db.collection("items").insertOne(
-  
     { name: req.body.text1, phone: req.body.text2, email: req.body.text3 },
-    function (err,response) {
-      data = { name:mysafeText1 , phone:mysafeText2, email: mysafeText3, _id: response.insertedId };
+    function (err, response) {
+      data = {
+        name: mysafeText1,
+        phone: mysafeText2,
+        email: mysafeText3,
+        _id: response.insertedId,
+      };
       res.json(data);
-      
     }
   );
 });
 
 app.post("/update-name", function (req, res) {
-  let myUpdatedSafeName=sanitizeHTML(req.body.text,{
+  let myUpdatedSafeName = sanitizeHTML(req.body.text, {
     allowedTags: [],
     allowedAttributes: {},
-  })
+  });
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
     { $set: { name: myUpdatedSafeName } },
@@ -321,32 +324,31 @@ app.post("/update-name", function (req, res) {
 });
 
 app.post("/update-phone", function (req, res) {
-  let myUpdatedSafePhone=sanitizeHTML(req.body.phoneNo,{
+  let myUpdatedSafePhone = sanitizeHTML(req.body.phoneNo, {
     allowedTags: [],
     allowedAttributes: {},
-  })
+  });
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
-    { $set: { phone:myUpdatedSafePhone } },
+    { $set: { phone: myUpdatedSafePhone } },
     function () {
       res.send("success");
     }
   );
 });
 app.post("/update-email", function (req, res) {
-  let myUpdatedSafeEmail=sanitizeHTML(req.body.mail,{
+  let myUpdatedSafeEmail = sanitizeHTML(req.body.mail, {
     allowedTags: [],
     allowedAttributes: {},
-  })
+  });
   db.collection("items").findOneAndUpdate(
     { _id: ObjectId(req.body.id) },
-    { $set: { email:myUpdatedSafeEmail } },
+    { $set: { email: myUpdatedSafeEmail } },
     function () {
       res.send("success");
     }
   );
 });
-
 
 app.post("/delete-item", function (req, res) {
   db.collection("items").deleteOne({ _id: ObjectId(req.body.id) }, function () {
